@@ -1,0 +1,43 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  app: ${JOB_NAME}
+  template: bsa-batch
+message: ${JOB_NAME} resource'ları olusturuldu
+metadata:
+  annotations:
+    description: "BSA Batch Pods Teamplate"
+    iconClass: fa fa-fighter-jet
+    openshift.io/display-name: BSA Batch Template
+    openshift.io/documentation-url: http://sosyal.bizbize.akbank.com.tr/devforums/bsa
+    openshift.io/long-description: Bu template ile BSA Batch pod'ları için gerekli resource'ları oluşturabilirsiniz
+    openshift.io/provider-display-name: BSA BATCH.
+    openshift.io/support-url: http://sosyal.bizbize.akbank.com.tr/devforums/bsa
+    tags: bsa
+  name: bsa-batch
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      jobName: ${JOB_NAME}
+    name: ${BATCH_NAME}
+  spec:
+    ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      job-name: ${JOB_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+parameters:
+- description: Gerekli kaynaklar olsturulurken isim kullanilacaktir
+  displayName: Proje adi
+  name: JOB_NAME
+  required: true
+- description: Gerekli kaynaklar olsturulurken isim kullanilacaktir
+  displayName: Proje adi
+  name: BATCH_NAME
+  required: true
